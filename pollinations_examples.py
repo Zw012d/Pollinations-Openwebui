@@ -1,36 +1,47 @@
-# pollinations_examples.py
-
+#!/usr/bin/env python3
 """
-Pollinations API Examples
-This script contains examples of how to interact with the Pollinations API for text generation,
-image generation, and chat conversations.
+Examples that use pollinations_openwebui.PollinationsClient
+Adjust API key as needed.
 """
 
-import requests
+from pollinations_openwebui import PollinationsClient
 
-# Example 1: Text Generation
-def generate_text(prompt):
-    response = requests.post('https://api.pollinations.ai/text', json={'prompt': prompt})
-    return response.json()
+API_KEY = None  # set to "sk_..." or "pk_..." if you have one
 
-# Usage
-text_response = generate_text("Once upon a time in a land far, far away...")
-print("Generated Text:", text_response)
+def example_text_simple():
+    client = PollinationsClient(api_key=API_KEY)
+    prompt = "Write a haiku about coding"
+    print("Simple text GET /text/{prompt}:")
+    resp = client.text_simple(prompt, model="openai", temperature=0.5)
+    print(resp)
 
-# Example 2: Image Generation
-def generate_image(prompt):
-    response = requests.post('https://api.pollinations.ai/image', json={'prompt': prompt})
-    return response.json()
+def example_chat():
+    client = PollinationsClient(api_key=API_KEY)
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Give me three tips for writing clean Python code."}
+    ]
+    print("Chat completions /v1/chat/completions:")
+    resp = client.chat_completions(messages, model="openai", temperature=0.7, max_tokens=300)
+    print(resp)
 
-# Usage
-image_response = generate_image("A beautiful sunset over the ocean")
-print("Generated Image URL:", image_response.get('url'))
+def example_image_save():
+    client = PollinationsClient(api_key=API_KEY)
+    prompt = "A serene mountain landscape with a river at sunrise"
+    print("Generating image and saving to file:")
+    result = client.generate_image_to_file(prompt, out_path="mountain.png", model="flux", width=1024, height=1024)
+    print(result)
 
-# Example 3: Chat Conversations
-def chat_with_pollinations(message):
-    response = requests.post('https://api.pollinations.ai/chat', json={'message': message})
-    return response.json()
+def example_account():
+    client = PollinationsClient(api_key=API_KEY)
+    print("Account profile (requires API key):")
+    print(client.account_profile())
+    print("Account balance (requires API key):")
+    print(client.account_balance())
 
-# Usage
-chat_response = chat_with_pollinations("Hello, how are you?")
-print("Chat Response:", chat_response)
+if __name__ == "__main__":
+    print("Running Pollinations examples (adjust API_KEY in file to use auth-required endpoints)\n")
+    example_text_simple()
+    example_chat()
+    example_image_save()
+    # example_account()  # enable if you set API_KEY
