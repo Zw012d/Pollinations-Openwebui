@@ -1,6 +1,6 @@
 """
 title: Pollinations AI (Enterprise Gateway)
-author: amanverasia (Updated by AI)
+author: gemini (Updated by AI)
 version: 7.6 (Production Grade - Fast Release)
 description: Ultra-resilient API gateway. Fixes broken image links by aligning with official Pollinations endpoints, resolves streaming hangs, and applies dynamic budget cutoffs.
 """
